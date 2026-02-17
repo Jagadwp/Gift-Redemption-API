@@ -27,9 +27,10 @@ ERD image: `docs/gift_redemption - public.png`
 - `ratings.score` (numeric(2,1)) allows half-star ratings (1.0 to 5.0).
 - `redemptions.total_point` captures points paid at redemption time.
 
-## Golang Architecture (Clean Architecture)
+## Clean Architecture
 
 This project uses a layered Clean Architecture:
+
 - **Handler (HTTP layer)**: request parsing, validation, and response formatting.
 - **Service (use-case layer)**: business rules, transactions, and orchestration.
 - **Repository (data access layer)**: isolated database operations (CRUD + queries).
@@ -65,7 +66,7 @@ These choices reduce query cost for common endpoints (`/gifts` listing, `/gifts/
 
 ## Files in `docs/`
 
-- `docs/dump_gift_redemption_schema.sql`: schema + sample data
+- `docs/dump_gift_redemption_schema.rar`: compressed database export (contains `.sql` schema + data)
 - `docs/gift_redemption - public.png`: physical ERD image
 - `docs/Gift Redemption API.postman_collection.json`: Postman collection
 

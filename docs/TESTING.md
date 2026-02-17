@@ -88,12 +88,14 @@ func TestGiftService_GetByID_Success(t *testing.T) {
 
 ### Star Rating Rounding
 Tests verify that `avg_rating` is correctly rounded to nearest 0.5:
+
 - 3.2 → 3.0
 - 3.6 → 3.5
 - 3.9 → 4.0
 
 ### Error Handling
 All service tests verify proper error propagation from repository layer:
+
 - `ErrNotFound` - Resource doesn't exist
 - `ErrDuplicateEntry` - Unique constraint violation
 - `ErrInsufficientStock` - Stock validation
@@ -103,6 +105,7 @@ All service tests verify proper error propagation from repository layer:
 
 ### Transaction Testing
 Redemption and rating services use database transactions which cannot be easily mocked:
+
 - **Current approach:** Test only validation logic before transactions
 - **Why:** `gorm.DB.Transaction()` requires actual database connection
 - **Solution for full coverage:** 
