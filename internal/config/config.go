@@ -13,6 +13,7 @@ import (
 type Config struct {
 	AppPort  string
 	AppEnv   string
+	AppHost  string
 	Database DatabaseConfig
 	JWT      JWTConfig
 }
@@ -97,6 +98,7 @@ func Load() *Config {
 	return &Config{
 		AppPort: port,
 		AppEnv:  appEnv,
+		AppHost: getEnv("APP_HOST", ""),
 		Database: DatabaseConfig{
 			Host:     getEnv("DB_HOST", "localhost"),
 			Port:     getEnv("DB_PORT", "5432"),

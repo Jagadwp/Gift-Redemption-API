@@ -9,7 +9,7 @@ import (
 	"syscall"
 	"time"
 
-	_ "github.com/gift-redemption/docs" // swagger generated docs
+	docs "github.com/gift-redemption/docs" // swagger generated docs
 	"github.com/gift-redemption/internal/config"
 	"github.com/gift-redemption/internal/database"
 	"github.com/gift-redemption/internal/handler"
@@ -34,6 +34,13 @@ import (
 // @description                 Enter: Bearer {token}
 func main() {
 	cfg := config.Load()
+
+	if cfg.AppHost != "" {
+		docs.SwaggerInfo.Host = cfg.AppHost
+		if cfg.AppEnv == "production" {
+			docs.SwaggerInfo.Schemes = []string{"https"}
+		}
+	}
 
 	database.RunMigrations(cfg)
 
