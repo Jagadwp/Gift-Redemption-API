@@ -2,6 +2,8 @@
 
 REST API for a gift redemption system featuring authentication, RBAC, pagination, and a rating system.
 
+Built with clean architecture and clear separation of concerns (handler/service/repository), this codebase emphasizes clean code and reusable design patterns. It is intentionally easy to review and run: one `make run` brings up the app, runs migrations + seeders, and generates Swagger docs. Unit tests cover core business logic, and the API is documented for quick exploration.
+
 ---
 
 ## Quick Start
@@ -286,7 +288,7 @@ Total: **16 unit tests** covering critical business logic.
 
 ### Swagger UI
 
-`http://localhost:8080/swagger/index.html`
+http://localhost:8080/swagger/index.html
 
 ### Response Format (JSON:API-like)
 

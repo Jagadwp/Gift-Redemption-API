@@ -6,29 +6,23 @@ This project includes unit tests for the service layer, focusing on business log
 ## Test Coverage
 
 ### Service Layer Tests
-- **Auth Service** (`auth_service_test.go`)
-  - Login with valid credentials
-  - Login with wrong password
-  - Login with non-existent user
 
-- **User Service** (`user_service_test.go`)
-  - Get user by ID (success & not found)
-  - Create user (success & duplicate email)
-  - Update user
-  - Delete user (success & not found)
-
-- **Gift Service** (`gift_service_test.go`)
-  - Get all gifts with pagination
-  - Get gift by ID (success & not found)
-  - Create gift
-  - Patch gift (partial update)
-  - Star rating rounding logic (table-driven tests)
-
-- **Redemption Service** (`redemption_service_test.go`)
-  - Gift not found validation
-  - Rate gift validation (not redeemed, gift not found)
-  - Score validation (1-5 range)
-  - **Note:** Transaction logic (stock deduction, rating stats update) requires integration tests with real DB
+- `auth_service_test.go`: login with valid credentials
+- `auth_service_test.go`: login with wrong password
+- `auth_service_test.go`: login with non-existent user
+- `user_service_test.go`: get user by ID (success & not found)
+- `user_service_test.go`: create user (success & duplicate email)
+- `user_service_test.go`: update user
+- `user_service_test.go`: delete user (success & not found)
+- `gift_service_test.go`: get all gifts with pagination
+- `gift_service_test.go`: get gift by ID (success & not found)
+- `gift_service_test.go`: create gift
+- `gift_service_test.go`: patch gift (partial update)
+- `gift_service_test.go`: star rating rounding logic (table-driven tests)
+- `redemption_service_test.go`: gift not found validation
+- `redemption_service_test.go`: rate gift validation (not redeemed, gift not found)
+- `redemption_service_test.go`: score validation (1-5 range)
+- `redemption_service_test.go`: note on transaction logic (stock deduction, rating stats update) requires integration tests with real DB
 
 ## Running Tests
 
@@ -59,6 +53,7 @@ go test -v ./internal/service/...
 We use manual mocks (not code generation) for simplicity and control. Mock repositories are located in `internal/repository/mocks/`.
 
 **Advantages:**
+
 - No external dependencies for mock generation
 - Easy to understand and modify
 - Full control over mock behavior
@@ -115,12 +110,14 @@ Redemption and rating services use database transactions which cannot be easily 
   - Or use sqlmock for mocking database queries
 
 **What's tested:**
+
 - ✅ Pre-transaction validation (gift exists, user has redeemed)
 - ⏭️ Stock deduction logic (requires integration test)
 - ⏭️ Rating stats update (requires integration test)
 
 ### Coverage Goals
 Current coverage focuses on:
+
 - ✅ Business logic validation
 - ✅ Error handling paths
 - ✅ Edge cases (rounding, validation)
