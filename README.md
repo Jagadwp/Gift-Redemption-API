@@ -1,8 +1,8 @@
 # Gift Redemption API
 
-REST API for a gift redemption system featuring authentication, RBAC, pagination, and a rating system.
+REST API for a gift redemption system featuring **authentication**, **RBAC**, **pagination**, and a **rating system**.
 
-Built with clean architecture and clear separation of concerns (handler/service/repository), this codebase emphasizes clean code and reusable design patterns. It is intentionally easy to review and run: one `make run` brings up the app, runs migrations + seeders, and generates Swagger docs. Unit tests cover core business logic, and the API is documented for quick exploration.
+Built with **clean architecture** and clear separation of concerns (**handler/service/repository**), this codebase emphasizes **clean code** and **reusable design patterns**. It is intentionally **easy to review and run**: one `make run` brings up the app, runs migrations + seeders, and generates Swagger docs. **Unit tests cover core business logic**, and the **API is documented** for quick exploration.
 
 ---
 
@@ -36,6 +36,7 @@ open http://localhost:8080/swagger/index.html
 
 * Tech Stack
 * Architecture
+* ERD
 * Features
 * Setup
 * Testing
@@ -132,6 +133,12 @@ gift-redemption/
 * Dependency Injection – Manual DI in `main.go`
 * Interface Segregation – Each service/repository has its own interface
 * Factory Pattern – Constructor functions `New...()`
+
+---
+
+## ERD
+
+![ERD](<docs/gift_redemption - public.png>)
 
 ---
 
@@ -287,7 +294,7 @@ Total: **16 unit tests** covering critical business logic.
 ## API Documentation
 
 ### Swagger UI
-
+Swagger URL:
 http://localhost:8080/swagger/index.html
 
 ### Response Format (JSON:API-like)

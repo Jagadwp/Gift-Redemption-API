@@ -6,6 +6,8 @@ This document accompanies the database dump and ERD image in `docs/`.
 
 ERD image: `docs/gift_redemption - public.png`
 
+![ERD](<gift_redemption - public.png>)
+
 **Entities and relationships**
 
 - `users` (1) --- (N) `redemptions`
