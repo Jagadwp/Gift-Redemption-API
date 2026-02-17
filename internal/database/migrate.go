@@ -10,8 +10,7 @@ import (
 )
 
 func RunMigrations(cfg *config.Config) {
-	dsn := "postgres://" + cfg.Database.User + ":" + cfg.Database.Password +
-		"@" + cfg.Database.Host + ":" + cfg.Database.Port + "/" + cfg.Database.Name + "?sslmode=disable"
+	dsn := cfg.Database.MigrationURL()
 
 	m, err := migrate.New("file://migrations", dsn)
 	if err != nil {

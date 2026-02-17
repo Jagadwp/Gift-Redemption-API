@@ -1,10 +1,11 @@
 package config
 
 import (
-	"fmt"
-	"os"
-	"strconv"
-	"strings"
+    "fmt"
+    "os"
+    "strconv"
+    "strings"
+    "net/url"
 
 	"github.com/joho/godotenv"
 )
@@ -54,6 +55,28 @@ func (d DatabaseConfig) DSN() string {
 		d.Password,
 		d.Name,
 	)
+}
+
+func (d DatabaseConfig) MigrationURL() string {
+    if d.URL != "" {
+        if strings.Contains(d.URL, "sslmode=") {
+            return d.URL
+        }
+        sep := "?"
+        if strings.Contains(d.URL, "?") {
+            sep = "&"
+        }
+        return d.URL + sep + "sslmode=require"
+    }
+
+    u := &url.URL{
+        Scheme: "postgres",
+        User:   url.UserPassword(d.User, d.Password),
+        Host:   d.Host + ":" + d.Port,
+        Path:   d.Name,
+        RawQuery: "sslmode=disable",
+    }
+    return u.String()
 }
 
 func Load() *Config {
