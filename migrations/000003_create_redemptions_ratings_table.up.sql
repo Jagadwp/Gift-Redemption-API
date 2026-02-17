@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS ratings (
     user_id        INT         NOT NULL REFERENCES users(id),
     gift_id        INT         NOT NULL REFERENCES gifts(id),
     redemption_id  INT         NOT NULL REFERENCES redemptions(id),
-    score          SMALLINT    NOT NULL CHECK (score BETWEEN 1 AND 5),
+    score          NUMERIC(2,1) NOT NULL CHECK (score BETWEEN 1 AND 5),
     created_at     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     -- one rating per redemption

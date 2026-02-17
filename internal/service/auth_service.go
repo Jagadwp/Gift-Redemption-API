@@ -39,16 +39,8 @@ func (s *authService) Login(req dto.LoginRequest) (*dto.LoginResponse, error) {
 		return nil, fmt.Errorf("generate token: %w", err)
 	}
 
-	return &dto.LoginResponse{
-		Token: token,
-		User: dto.UserResponse{
-			ID:        user.ID,
-			Name:      user.Name,
-			Email:     user.Email,
-			Role:      string(user.Role),
-			CreatedAt: user.CreatedAt.Format(time.RFC3339),
-		},
-	}, nil
+	res := dto.ToLoginResponse(token, *user)
+	return &res, nil
 }
 
 func (s *authService) generateToken(userID uint, role string) (string, error) {

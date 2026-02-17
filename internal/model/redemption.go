@@ -20,7 +20,7 @@ type Rating struct {
 	UserID       uint      `gorm:"not null;index" json:"user_id"`
 	GiftID       uint      `gorm:"not null;index" json:"gift_id"`
 	RedemptionID uint      `gorm:"not null" json:"redemption_id"`
-	Score        int       `gorm:"not null" json:"score"` // 1–5
+	Score        float64   `gorm:"not null" json:"score"` // 1–5
 	CreatedAt    time.Time `json:"created_at"`
 	UpdatedAt    time.Time `json:"updated_at"`
 

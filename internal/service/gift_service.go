@@ -2,7 +2,6 @@ package service
 
 import (
 	"math"
-	"time"
 
 	"github.com/gift-redemption/internal/dto"
 	"github.com/gift-redemption/internal/model"
@@ -44,7 +43,7 @@ func (s *giftService) GetAll(query dto.PaginationQuery) ([]dto.GiftResponse, *re
 
 	result := make([]dto.GiftResponse, len(gifts))
 	for i, g := range gifts {
-		result[i] = toGiftResponse(g)
+		result[i] = dto.ToGiftResponse(g)
 	}
 
 	totalPages := int(math.Ceil(float64(total) / float64(query.Limit)))
@@ -63,7 +62,7 @@ func (s *giftService) GetByID(id uint) (*dto.GiftResponse, error) {
 	if err != nil {
 		return nil, err
 	}
-	res := toGiftResponse(*gift)
+	res := dto.ToGiftResponse(*gift)
 	return &res, nil
 }
 
@@ -82,7 +81,7 @@ func (s *giftService) Create(req dto.CreateGiftRequest) (*dto.GiftResponse, erro
 		return nil, err
 	}
 
-	res := toGiftResponse(*gift)
+	res := dto.ToGiftResponse(*gift)
 	return &res, nil
 }
 
@@ -104,7 +103,7 @@ func (s *giftService) Update(id uint, req dto.UpdateGiftRequest) (*dto.GiftRespo
 		return nil, err
 	}
 
-	res := toGiftResponse(*gift)
+	res := dto.ToGiftResponse(*gift)
 	return &res, nil
 }
 
@@ -141,28 +140,10 @@ func (s *giftService) Patch(id uint, req dto.PatchGiftRequest) (*dto.GiftRespons
 		return nil, err
 	}
 
-	res := toGiftResponse(*gift)
+	res := dto.ToGiftResponse(*gift)
 	return &res, nil
 }
 
 func (s *giftService) Delete(id uint) error {
 	return s.giftRepo.Delete(id)
-}
-
-func toGiftResponse(g model.Gift) dto.GiftResponse {
-	return dto.GiftResponse{
-		ID:           g.ID,
-		Name:         g.Name,
-		Description:  g.Description,
-		Point:        g.Point,
-		Stock:        g.Stock,
-		ImageURL:     g.ImageURL,
-		IsNew:        g.IsNew,
-		IsBestSeller: g.IsBestSeller,
-		AvgRating:    g.AvgRating,
-		StarRating:   g.StarRating(),
-		TotalReviews: g.TotalReviews,
-		InStock:      g.InStock(),
-		CreatedAt:    g.CreatedAt.Format(time.RFC3339),
-	}
 }

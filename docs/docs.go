@@ -1005,7 +1005,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "score": {
-                    "type": "integer",
+                    "type": "number",
                     "maximum": 5,
                     "minimum": 1
                 }
@@ -1027,7 +1027,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "score": {
-                    "type": "integer"
+                    "type": "number"
                 },
                 "star_rating": {
                     "type": "number"

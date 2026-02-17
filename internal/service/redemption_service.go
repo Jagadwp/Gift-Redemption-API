@@ -2,7 +2,6 @@ package service
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/gift-redemption/internal/dto"
 	"github.com/gift-redemption/internal/model"
@@ -60,14 +59,8 @@ func (s *redemptionService) Redeem(userID, giftID uint, req dto.RedemptionReques
 		return nil, err
 	}
 
-	return &dto.RedemptionResponse{
-		RedemptionID: redemption.ID,
-		GiftID:       gift.ID,
-		GiftName:     gift.Name,
-		Quantity:     redemption.Quantity,
-		TotalPoint:   redemption.TotalPoint,
-		RedeemedAt:   redemption.RedeemedAt.Format(time.RFC3339),
-	}, nil
+	res := dto.ToRedemptionResponse(*redemption, gift.Name)
+	return &res, nil
 }
 
 func (s *redemptionService) Rate(userID, giftID uint, req dto.RatingRequest) (*dto.RatingResponse, error) {
@@ -77,13 +70,14 @@ func (s *redemptionService) Rate(userID, giftID uint, req dto.RatingRequest) (*d
 		return nil, err
 	}
 
-	gift, err := s.giftRepo.FindByID(giftID)
+	_, err = s.giftRepo.FindByID(giftID)
 	if err != nil {
 		return nil, err
 	}
 
+	var rating *model.Rating
 	err = repository.WithTransaction(s.db, func(tx *gorm.DB) error {
-		rating := &model.Rating{
+		rating = &model.Rating{
 			UserID:       userID,
 			GiftID:       giftID,
 			RedemptionID: redemption.ID,
@@ -108,11 +102,6 @@ func (s *redemptionService) Rate(userID, giftID uint, req dto.RatingRequest) (*d
 		return nil, err
 	}
 
-	return &dto.RatingResponse{
-		GiftID:     gift.ID,
-		GiftName:   gift.Name,
-		Score:      req.Score,
-		AvgRating:  updatedGift.AvgRating,
-		StarRating: updatedGift.StarRating(),
-	}, nil
+	resp := dto.ToRatingResponse(*rating, *updatedGift)
+	return &resp, nil
 }

@@ -110,7 +110,7 @@ definitions:
       score:
         maximum: 5
         minimum: 1
-        type: integer
+        type: number
     required:
     - score
     type: object
@@ -125,7 +125,7 @@ definitions:
       id:
         type: integer
       score:
-        type: integer
+        type: number
       star_rating:
         type: number
     type: object

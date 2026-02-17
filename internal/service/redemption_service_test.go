@@ -91,19 +91,19 @@ func TestRedemptionService_Rate_ValidationScore(t *testing.T) {
 
 	tests := []struct {
 		name  string
-		score int
+		score float64
 		valid bool
 	}{
 		{"score 1 is valid", 1, true},
-		{"score 3 is valid", 3, true},
+		{"score 4.5 is valid", 4.5, true},
 		{"score 5 is valid", 5, true},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			req := dto.RatingRequest{Score: tt.score}
-			assert.GreaterOrEqual(t, req.Score, 1)
-			assert.LessOrEqual(t, req.Score, 5)
+			assert.GreaterOrEqual(t, req.Score, 1.0)
+			assert.LessOrEqual(t, req.Score, 5.0)
 		})
 	}
 }
