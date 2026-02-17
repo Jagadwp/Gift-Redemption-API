@@ -1,44 +1,35 @@
-# Binary output
-bin/
-out/
-dist/
-
-# Environment variables (Critical for security)
+# Environment
 .env
 .env.local
-.env.*.local
-# DO NOT ignore .env.example as it serves as a template
 
-# Go specific
-vendor/
+# Binary
+/bin
 *.exe
 *.exe~
 *.dll
 *.so
 *.dylib
+
+# Test binary, built with `go test -c`
 *.test
-*.out
 
-# IDE - VS Code
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-*.code-workspace
+# Output of the go coverage tool
+coverage.out
+coverage.html
 
-# WSL / OS specific
+# Go workspace file
+go.work
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
 .DS_Store
 Thumbs.db
-desktop.ini
 
-# Docker
-.docker/
-# If you use local data volumes for your DB in docker-compose
-pgdata/
-mysql_data/
-redis_data/
-
-# Documentation & Logs
-docs/gen/
-*.log
+# Temporary files
+/tmp
