@@ -27,7 +27,6 @@ func NewAuthService(userRepo repository.UserRepository, cfg *config.Config) Auth
 func (s *authService) Login(req dto.LoginRequest) (*dto.LoginResponse, error) {
 	user, err := s.userRepo.FindByEmail(req.Email)
 	if err != nil {
-		// return generic message — jangan expose "email not found"
 		return nil, apperror.ErrNotFound
 	}
 

@@ -2,9 +2,6 @@
 bin/
 out/
 dist/
-# If you build a specific binary name
-server
-main
 
 # Environment variables (Critical for security)
 .env

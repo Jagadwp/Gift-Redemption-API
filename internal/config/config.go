@@ -51,7 +51,7 @@ func Load() *Config {
             Name:     getEnv("DB_NAME", "gift_redemption"),
         },
         JWT: JWTConfig{
-            Secret:      getEnv("JWT_SECRET", "change-me"),
+            Secret:      getEnv("JWT_SECRET", ""),
             ExpiryHours: jwtExpiry,
         },
     }

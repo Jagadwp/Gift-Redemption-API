@@ -1,0 +1,743 @@
+basePath: /
+definitions:
+  dto.CreateGiftRequest:
+    properties:
+      description:
+        type: string
+      image_url:
+        type: string
+      is_best_seller:
+        type: boolean
+      is_new:
+        type: boolean
+      name:
+        type: string
+      point:
+        minimum: 1
+        type: integer
+      stock:
+        minimum: 0
+        type: integer
+    required:
+    - name
+    - point
+    type: object
+  dto.CreateUserRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        minLength: 6
+        type: string
+      role:
+        enum:
+        - admin
+        - user
+        type: string
+    required:
+    - email
+    - name
+    - password
+    type: object
+  dto.GiftResponse:
+    properties:
+      avg_rating:
+        type: number
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      image_url:
+        type: string
+      in_stock:
+        type: boolean
+      is_best_seller:
+        type: boolean
+      is_new:
+        type: boolean
+      name:
+        type: string
+      point:
+        type: integer
+      star_rating:
+        type: number
+      stock:
+        type: integer
+      total_reviews:
+        type: integer
+    type: object
+  dto.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        minLength: 6
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  dto.LoginResponse:
+    properties:
+      token:
+        type: string
+      user:
+        $ref: '#/definitions/dto.UserResponse'
+    type: object
+  dto.PatchGiftRequest:
+    properties:
+      description:
+        type: string
+      image_url:
+        type: string
+      is_best_seller:
+        type: boolean
+      is_new:
+        type: boolean
+      name:
+        type: string
+      point:
+        type: integer
+      stock:
+        type: integer
+    type: object
+  dto.RatingRequest:
+    properties:
+      score:
+        maximum: 5
+        minimum: 1
+        type: integer
+    required:
+    - score
+    type: object
+  dto.RatingResponse:
+    properties:
+      avg_rating:
+        type: number
+      gift_id:
+        type: integer
+      gift_name:
+        type: string
+      id:
+        type: integer
+      score:
+        type: integer
+      star_rating:
+        type: number
+    type: object
+  dto.RedemptionRequest:
+    properties:
+      quantity:
+        minimum: 1
+        type: integer
+    required:
+    - quantity
+    type: object
+  dto.RedemptionResponse:
+    properties:
+      gift_id:
+        type: integer
+      gift_name:
+        type: string
+      quantity:
+        type: integer
+      redeemed_at:
+        type: string
+      redemption_id:
+        type: integer
+      total_point:
+        type: integer
+    type: object
+  dto.UpdateGiftRequest:
+    properties:
+      description:
+        type: string
+      image_url:
+        type: string
+      is_best_seller:
+        type: boolean
+      is_new:
+        type: boolean
+      name:
+        type: string
+      point:
+        minimum: 1
+        type: integer
+      stock:
+        minimum: 0
+        type: integer
+    required:
+    - name
+    - point
+    type: object
+  dto.UpdateUserRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      role:
+        enum:
+        - admin
+        - user
+        type: string
+    required:
+    - email
+    - name
+    - role
+    type: object
+  dto.UserResponse:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      role:
+        type: string
+    type: object
+  response.Meta:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  response.Pagination:
+    properties:
+      current_page:
+        type: integer
+      per_page:
+        type: integer
+      total:
+        type: integer
+      total_pages:
+        type: integer
+    type: object
+  response.envelope:
+    properties:
+      data: {}
+      errors: {}
+      meta:
+        $ref: '#/definitions/response.Meta'
+      pagination:
+        $ref: '#/definitions/response.Pagination'
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: admin@gift-redemption.com
+    name: API Support
+  description: REST API for gift redemption system
+  title: Gift Redemption API
+  version: "1.0"
+paths:
+  /gifts:
+    get:
+      description: Returns paginated list of gifts with sorting options
+      parameters:
+      - description: 'Page number (default: 1)'
+        in: query
+        name: page
+        type: integer
+      - description: 'Items per page (default: 10, max: 100)'
+        in: query
+        name: limit
+        type: integer
+      - description: 'Sort field: created_at | avg_rating (default: created_at)'
+        in: query
+        name: sort_by
+        type: string
+      - description: 'Sort direction: asc | desc (default: desc)'
+        in: query
+        name: sort_dir
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.envelope'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.GiftResponse'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.envelope'
+      security:
+      - BearerAuth: []
+      summary: Get all gifts
+      tags:
+      - Gifts
+    post:
+      consumes:
+      - application/json
+      description: Create a new gift item (admin only)
+      parameters:
+      - description: Gift data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateGiftRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.envelope'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.GiftResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.envelope'
+      security:
+      - BearerAuth: []
+      summary: Create gift
+      tags:
+      - Gifts
+  /gifts/{id}:
+    delete:
+      description: Soft delete a gift item (admin only)
+      parameters:
+      - description: Gift ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.envelope'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.envelope'
+      security:
+      - BearerAuth: []
+      summary: Delete gift
+      tags:
+      - Gifts
+    get:
+      description: Returns a single gift with star rating
+      parameters:
+      - description: Gift ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.envelope'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.GiftResponse'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.envelope'
+      security:
+      - BearerAuth: []
+      summary: Get gift by ID
+      tags:
+      - Gifts
+    patch:
+      consumes:
+      - application/json
+      description: Partial update of a gift item (admin only)
+      parameters:
+      - description: Gift ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Partial gift data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.PatchGiftRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.envelope'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.GiftResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.envelope'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.envelope'
+      security:
+      - BearerAuth: []
+      summary: Patch gift
+      tags:
+      - Gifts
+    put:
+      consumes:
+      - application/json
+      description: Full update of a gift item (admin only)
+      parameters:
+      - description: Gift ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Gift data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateGiftRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.envelope'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.GiftResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.envelope'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.envelope'
+      security:
+      - BearerAuth: []
+      summary: Update gift
+      tags:
+      - Gifts
+  /gifts/{id}/rating:
+    post:
+      consumes:
+      - application/json
+      description: Give a rating (1-5) to a gift that has been redeemed. One rating
+        per redemption.
+      parameters:
+      - description: Gift ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Rating data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RatingRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.envelope'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.RatingResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.envelope'
+        "422":
+          description: Not redeemed or already rated
+          schema:
+            $ref: '#/definitions/response.envelope'
+      security:
+      - BearerAuth: []
+      summary: Rate a gift
+      tags:
+      - Gifts
+  /gifts/{id}/redeem:
+    post:
+      consumes:
+      - application/json
+      description: Redeem a gift item. Stock must be available. Supports quantity
+        > 1.
+      parameters:
+      - description: Gift ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Redemption data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RedemptionRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.envelope'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.RedemptionResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.envelope'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.envelope'
+        "422":
+          description: Insufficient stock
+          schema:
+            $ref: '#/definitions/response.envelope'
+      security:
+      - BearerAuth: []
+      summary: Redeem a gift
+      tags:
+      - Gifts
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate user and return JWT token
+      parameters:
+      - description: Login credentials
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.envelope'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.LoginResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.envelope'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.envelope'
+      summary: User login
+      tags:
+      - Auth
+  /users:
+    get:
+      description: Returns list of all users (admin only)
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.envelope'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.UserResponse'
+                  type: array
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.envelope'
+      security:
+      - BearerAuth: []
+      summary: Get all users
+      tags:
+      - Users
+    post:
+      consumes:
+      - application/json
+      description: Create a new user (admin only)
+      parameters:
+      - description: User data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.envelope'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.UserResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.envelope'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.envelope'
+      security:
+      - BearerAuth: []
+      summary: Create user
+      tags:
+      - Users
+  /users/{id}:
+    delete:
+      description: Soft delete a user (admin only)
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.envelope'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.envelope'
+      security:
+      - BearerAuth: []
+      summary: Delete user
+      tags:
+      - Users
+    get:
+      description: Returns a single user by ID (admin only)
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.envelope'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.UserResponse'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.envelope'
+      security:
+      - BearerAuth: []
+      summary: Get user by ID
+      tags:
+      - Users
+    put:
+      consumes:
+      - application/json
+      description: Update user data (admin only)
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: User data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.envelope'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.UserResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.envelope'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.envelope'
+      security:
+      - BearerAuth: []
+      summary: Update user
+      tags:
+      - Users
+securityDefinitions:
+  BearerAuth:
+    description: 'Enter: Bearer {token}'
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
