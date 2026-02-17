@@ -67,6 +67,4 @@ These choices reduce query cost for common endpoints (`/gifts` listing, `/gifts/
 - `docs/Gift Redemption API.postman_collection.json`: Postman collection
 
 Published Postman doc URL:
-```
 https://documenter.getpostman.com/view/12534314/2sBXcDGM9Z
-```
