@@ -1,0 +1,666 @@
+{
+	"info": {
+		"_postman_id": "409b7638-69cd-4727-affd-8db9f8de7bae",
+		"name": "Gift Redemption API",
+		"description": "Collection for Gift Redemption API - Rolling Glory Backend Test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "12534314",
+		"_collection_link": "https://universal-satellite-301788.postman.co/workspace/My-Workspace~8898641d-65b7-47f2-8c76-e57ecb2584c4/collection/12534314-409b7638-69cd-4727-affd-8db9f8de7bae?action=share&creator=12534314&source=collection_link"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login - Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();",
+									"if (res.data && res.data.token) {",
+									"    pm.collectionVariables.set('token', res.data.token);",
+									"    console.log('Token saved:', res.data.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"admin@gift-redemption.com\",\n  \"password\": \"password123\"\n}"
+						},
+						"url": "{{base_url}}/login",
+						"description": "Login as admin. Token will be auto-saved to collection variable."
+					},
+					"response": []
+				},
+				{
+					"name": "Login - User 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();",
+									"if (res.data && res.data.token) {",
+									"    pm.collectionVariables.set('token', res.data.token);",
+									"    console.log('Token saved:', res.data.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"password123\"\n}"
+						},
+						"url": "{{base_url}}/login",
+						"description": "Login as regular user."
+					},
+					"response": []
+				},
+				{
+					"name": "Login - User 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();",
+									"if (res.data && res.data.token) {",
+									"    pm.collectionVariables.set('token', res.data.token);",
+									"    console.log('Token saved:', res.data.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"jane@example.com\",\n  \"password\": \"password123\"\n}"
+						},
+						"url": "{{base_url}}/login",
+						"description": "Login as regular user."
+					},
+					"response": []
+				},
+				{
+					"name": "Login - Wrong Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"admin@gift-redemption.com\",\n  \"password\": \"wrongpassword\"\n}"
+						},
+						"url": "{{base_url}}/login",
+						"description": "Should return 401."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Gifts",
+			"item": [
+				{
+					"name": "Get All Gifts",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": "{{base_url}}/gifts",
+						"description": "Get all gifts with default pagination."
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Gifts - Paginated",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/gifts?page=1&limit=3&sort_by=created_at&sort_dir=desc",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"gifts"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "3"
+								},
+								{
+									"key": "sort_by",
+									"value": "created_at"
+								},
+								{
+									"key": "sort_dir",
+									"value": "desc"
+								}
+							]
+						},
+						"description": "Get gifts with pagination, 3 items per page, sorted by newest."
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Gifts - Sort by Rating",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/gifts?page=1&limit=10&sort_by=avg_rating&sort_dir=desc",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"gifts"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "sort_by",
+									"value": "avg_rating"
+								},
+								{
+									"key": "sort_dir",
+									"value": "desc"
+								}
+							]
+						},
+						"description": "Get gifts sorted by highest rating."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Gift by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": "{{base_url}}/gifts/1",
+						"description": "Get single gift detail. Check star_rating field for rounded rating."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Gift by ID - Not Found",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": "{{base_url}}/gifts/9999",
+						"description": "Should return 404."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Gift",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Mechanical Keyboard Keychron K2\",\n  \"description\": \"TKL wireless mechanical keyboard, hot-swappable, RGB backlight\",\n  \"point\": 180000,\n  \"stock\": 8,\n  \"image_url\": \"https://via.placeholder.com/400x400?text=Keychron+K2\",\n  \"is_new\": true,\n  \"is_best_seller\": false\n}"
+						},
+						"url": "{{base_url}}/gifts",
+						"description": "Create a new gift. Requires admin token."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Gift - Validation Error",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"description\": \"Missing required name and point\"\n}"
+						},
+						"url": "{{base_url}}/gifts",
+						"description": "Should return 400 validation error."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Gift (PUT)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Samsung Galaxy S9 Midnight Black 4/64 GB\",\n  \"description\": \"Updated description - Ukuran layar 6.2 inci, Super AMOLED\",\n  \"point\": 210000,\n  \"stock\": 8,\n  \"image_url\": \"https://via.placeholder.com/400x400?text=Galaxy+S9\",\n  \"is_new\": true,\n  \"is_best_seller\": true\n}"
+						},
+						"url": "{{base_url}}/gifts/1",
+						"description": "Full update. All fields required. Requires admin token."
+					},
+					"response": []
+				},
+				{
+					"name": "Patch Gift (PATCH)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"stock\": 15,\n  \"is_best_seller\": true\n}"
+						},
+						"url": "{{base_url}}/gifts/1",
+						"description": "Partial update. Only send fields to update. Requires admin token."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Gift",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": "{{base_url}}/gifts/6",
+						"description": "Soft delete a gift. Requires admin token."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Redeem & Rating",
+			"item": [
+				{
+					"name": "Redeem Gift",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"quantity\": 1\n}"
+						},
+						"url": "{{base_url}}/gifts/1/redeem",
+						"description": "Redeem gift ID 1."
+					},
+					"response": []
+				},
+				{
+					"name": "Redeem Gift - Multi Quantity",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"quantity\": 3\n}"
+						},
+						"url": "{{base_url}}/gifts/2/redeem",
+						"description": "Redeem 3 items at once."
+					},
+					"response": []
+				},
+				{
+					"name": "Redeem Gift - Out of Stock",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"quantity\": 1\n}"
+						},
+						"url": "{{base_url}}/gifts/5/redeem",
+						"description": "Gift ID 5 (Sony WH-1000XM5) has 0 stock. Should return 422."
+					},
+					"response": []
+				},
+				{
+					"name": "Rate Gift",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"score\": 3.6\n}"
+						},
+						"url": "{{base_url}}/gifts/1/rating",
+						"description": "Rate gift ID 1. Must have redeemed first. Score 1-5."
+					},
+					"response": []
+				},
+				{
+					"name": "Rate Gift - Already Rated",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"score\": 3\n}"
+						},
+						"url": "{{base_url}}/gifts/1/rating",
+						"description": "Rate same gift again. Should return 422."
+					},
+					"response": []
+				},
+				{
+					"name": "Rate Gift - Not Redeemed",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"score\": 4\n}"
+						},
+						"url": "{{base_url}}/gifts/3/rating",
+						"description": "Rate a gift that hasn't been redeemed. Should return 422."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": "{{base_url}}/users",
+						"description": "Get all users. Requires admin token."
+					},
+					"response": []
+				},
+				{
+					"name": "Get User by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": "{{base_url}}/users/1",
+						"description": "Get user by ID. Requires admin token."
+					},
+					"response": []
+				},
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Jane Doe\",\n  \"email\": \"jane@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"user\"\n}"
+						},
+						"url": "{{base_url}}/users",
+						"description": "Create a new user. Requires admin token."
+					},
+					"response": []
+				},
+				{
+					"name": "Create User - Duplicate Email",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Duplicate\",\n  \"email\": \"john@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"user\"\n}"
+						},
+						"url": "{{base_url}}/users",
+						"description": "Should return 422 - email already registered."
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"John Doe Updated\",\n  \"email\": \"john@example.com\",\n  \"role\": \"user\"\n}"
+						},
+						"url": "{{base_url}}/users/2",
+						"description": "Update user data. Requires admin token."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": "{{base_url}}/users/2",
+						"description": "Soft delete user. Requires admin token."
+					},
+					"response": []
+				},
+				{
+					"name": "Access Users - Forbidden (user role)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": "{{base_url}}/users",
+						"description": "Login as regular user first, then try this. Should return 403."
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
