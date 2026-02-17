@@ -101,7 +101,7 @@ gorm.io/gorm v1.25.10
 
 ```
 gift-redemption/
-├── cmd/server/              # Application entrypoint
+├── cmd/server/             # Application entrypoint
 │   ├── main.go             # Bootstrap & DI
 │   └── router.go           # Route definitions
 ├── internal/
@@ -117,14 +117,20 @@ gift-redemption/
 │   ├── repository/         # Data access layer
 │   │   └── mocks/          # Mock repositories for testing
 │   └── service/            # Business logic layer
+│       └── *_test.go       # Unit tests (service layer)
 ├── migrations/             # SQL migration files
 ├── seeds/                  # Database seeders
 ├── docs/                   # Swagger docs + documentation
-│   ├── TESTING.md
-│   └── *.postman_collection.json
+│   ├── EXPLANATION.md                       # ERD + architecture + DB decisions
+│   ├── TESTING.md                           # Test strategy and coverage
+│   ├── dump_gift_redemption_schema.rar      # DB schema + sample data export
+│   ├── gift_redemption - public.png         # Physical ERD image
+│   ├── swagger.json / swagger.yaml          # OpenAPI specs
+│   └── Gift Redemption API.postman_collection.json # Postman collection
 ├── docker-compose.yml
 ├── Makefile
-└── README.md
+├── README.md
+└── go.mod / go.sum
 ```
 
 ### Design Patterns
