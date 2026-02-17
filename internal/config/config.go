@@ -1,65 +1,97 @@
 package config
 
 import (
-    "fmt"
-    "os"
-    "strconv"
+	"fmt"
+	"os"
+	"strconv"
+	"strings"
 
-    "github.com/joho/godotenv"
+	"github.com/joho/godotenv"
 )
 
 type Config struct {
-    AppPort  string
-    AppEnv   string
-    Database DatabaseConfig
-    JWT      JWTConfig
+	AppPort  string
+	AppEnv   string
+	Database DatabaseConfig
+	JWT      JWTConfig
 }
 
 type DatabaseConfig struct {
-    Host     string
-    Port     string
-    User     string
-    Password string
-    Name     string
+	Host     string
+	Port     string
+	User     string
+	Password string
+	Name     string
+	URL      string
 }
 
 type JWTConfig struct {
-    Secret      string
-    ExpiryHours int
+	Secret      string
+	ExpiryHours int
 }
 
 func (d DatabaseConfig) DSN() string {
-    return fmt.Sprintf(
-        "host=%s port=%s user=%s password=%s dbname=%s sslmode=disable TimeZone=Asia/Jakarta",
-        d.Host, d.Port, d.User, d.Password, d.Name,
-    )
+	// If DATABASE_URL exists (Heroku)
+	if d.URL != "" {
+		if strings.Contains(d.URL, "sslmode=") {
+			return d.URL
+		}
+
+		sep := "?"
+		if strings.Contains(d.URL, "?") {
+			sep = "&"
+		}
+
+		return d.URL + sep + "sslmode=require"
+	}
+
+	// Local development DSN
+	return fmt.Sprintf(
+		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+		d.Host,
+		d.Port,
+		d.User,
+		d.Password,
+		d.Name,
+	)
 }
 
 func Load() *Config {
-    _ = godotenv.Load()
+	appEnv := getEnv("APP_ENV", "development")
 
-    jwtExpiry, _ := strconv.Atoi(getEnv("JWT_EXPIRY_HOURS", "24"))
+	// Only load .env in development
+	if appEnv == "development" {
+		_ = godotenv.Load()
+	}
 
-    return &Config{
-        AppPort: getEnv("APP_PORT", "8080"),
-        AppEnv:  getEnv("APP_ENV", "development"),
-        Database: DatabaseConfig{
-            Host:     getEnv("DB_HOST", "localhost"),
-            Port:     getEnv("DB_PORT", "5432"),
-            User:     getEnv("DB_USER", "postgres"),
-            Password: getEnv("DB_PASSWORD", ""),
-            Name:     getEnv("DB_NAME", "gift_redemption"),
-        },
-        JWT: JWTConfig{
-            Secret:      getEnv("JWT_SECRET", ""),
-            ExpiryHours: jwtExpiry,
-        },
-    }
+	jwtExpiry, _ := strconv.Atoi(getEnv("JWT_EXPIRY_HOURS", "24"))
+
+	port := getEnv("PORT", "")
+	if port == "" {
+		port = getEnv("APP_PORT", "8080")
+	}
+
+	return &Config{
+		AppPort: port,
+		AppEnv:  appEnv,
+		Database: DatabaseConfig{
+			Host:     getEnv("DB_HOST", "localhost"),
+			Port:     getEnv("DB_PORT", "5432"),
+			User:     getEnv("DB_USER", "postgres"),
+			Password: getEnv("DB_PASSWORD", ""),
+			Name:     getEnv("DB_NAME", "gift_redemption"),
+			URL:      getEnv("DATABASE_URL", ""),
+		},
+		JWT: JWTConfig{
+			Secret:      getEnv("JWT_SECRET", ""),
+			ExpiryHours: jwtExpiry,
+		},
+	}
 }
 
 func getEnv(key, fallback string) string {
-    if val := os.Getenv(key); val != "" {
-        return val
-    }
-    return fallback
+	if val := os.Getenv(key); val != "" {
+		return val
+	}
+	return fallback
 }

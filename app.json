@@ -1,0 +1,21 @@
+{
+  "name": "gift-redemption",
+  "description": "Gift Redemption API (Go + PostgreSQL)",
+  "env": {
+    "APP_ENV": {
+      "value": "production"
+    },
+    "APP_PORT": {
+      "value": "8080"
+    },
+    "JWT_SECRET": {
+      "description": "JWT signing secret"
+    },
+    "JWT_EXPIRY_HOURS": {
+      "value": "24"
+    }
+  },
+  "addons": [
+    "heroku-postgresql"
+  ]
+}
