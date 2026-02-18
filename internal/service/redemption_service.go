@@ -76,12 +76,13 @@ func (s *redemptionService) Rate(userID, giftID uint, req dto.RatingRequest) (*d
 	}
 
 	var rating *model.Rating
+	roundedScore := dto.RoundToHalf(req.Score)
 	err = repository.WithTransaction(s.db, func(tx *gorm.DB) error {
 		rating = &model.Rating{
 			UserID:       userID,
 			GiftID:       giftID,
 			RedemptionID: redemption.ID,
-			Score:        req.Score,
+			Score:        roundedScore,
 		}
 
 		if err := s.ratingRepo.Create(tx, rating); err != nil {

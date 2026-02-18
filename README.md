@@ -2,7 +2,7 @@
 
 REST API for a gift redemption system featuring **authentication**, **RBAC**, **pagination**, and a **rating system**.
 
-Built with **clean architecture** and clear separation of concerns (**handler/service/repository**), this codebase emphasizes **clean code** and **reusable design patterns**. It is intentionally **easy to review and run**: one `make run` brings up the app, runs migrations + seeders, and generates Swagger docs. **Unit tests cover core business logic**, and the **API is documented** for quick exploration.
+Built with **clean architecture** and clear separation of concerns (**handler/service/repository**), this codebase emphasizes **clean code** and **reusable design patterns**. It is intentionally **easy to review and run**: one `make run` brings up the app, runs migrations + seeders, and generates Swagger docs. **Unit tests cover core business logic**, and the **API is documented** for quick exploration. **Heroku deployment is included** for a simple, low-friction production setup.
 
 ---
 
@@ -41,6 +41,7 @@ open http://localhost:8080/swagger/index.html
 * Setup
 * Testing
 * API Documentation
+* Deployment (Heroku)
 * Bonus Implementation
 
 ---
@@ -293,15 +294,18 @@ go test -v ./internal/service -run TestAuthService_Login_Success
 * Gift Service – CRUD, pagination, star rounding
 * Redemption Service – business validation
 
-Total: **16 unit tests** covering critical business logic.
+Unit tests cover critical business logic.
 
 ---
 
 ## API Documentation
 
 ### Swagger UI
-Swagger URL:
+Swagger URL (local):
 http://localhost:8080/swagger/index.html
+
+Swagger URL (production):
+https://gift-redemption-api-c059a607629a.herokuapp.com/swagger/index.html
 
 ### Response Format (JSON:API-like)
 
@@ -338,6 +342,16 @@ round(avg_rating * 2) / 2
 ```
 
 ---
+
+## Deployment (Heroku)
+
+**Heroku deployment is implemented and live.**
+
+Production base URL:
+https://gift-redemption-api-c059a607629a.herokuapp.com
+
+Swagger:
+https://gift-redemption-api-c059a607629a.herokuapp.com/swagger/index.html
 
 ## Bonus Implementation
 

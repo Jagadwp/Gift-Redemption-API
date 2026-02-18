@@ -1,7 +1,6 @@
 package model
 
 import (
-	"math"
 	"time"
 
 	"gorm.io/gorm"
@@ -21,12 +20,6 @@ type Gift struct {
 	CreatedAt    time.Time      `json:"created_at"`
 	UpdatedAt    time.Time      `json:"updated_at"`
 	DeletedAt    gorm.DeletedAt `gorm:"index" json:"-"`
-}
-
-// StarRating returns avg_rating rounded to nearest 0.5
-// e.g. 3.2 → 3.0, 3.6 → 3.5, 3.9 → 4.0
-func (g *Gift) StarRating() float64 {
-	return math.Round(g.AvgRating*2) / 2
 }
 
 func (g *Gift) InStock() bool {

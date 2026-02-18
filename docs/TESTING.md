@@ -23,6 +23,7 @@ This project includes unit tests for the service layer, focusing on business log
 - `redemption_service_test.go`: rate gift validation (not redeemed, gift not found)
 - `redemption_service_test.go`: score validation (1-5 range)
 - `redemption_service_test.go`: note on transaction logic (stock deduction, rating stats update) requires integration tests with real DB
+- `rating_test.go`: rating rounding to nearest 0.5
 
 ## Running Tests
 
@@ -87,11 +88,13 @@ func TestGiftService_GetByID_Success(t *testing.T) {
 ## Key Test Cases
 
 ### Star Rating Rounding
-Tests verify that `avg_rating` is correctly rounded to nearest 0.5:
+Tests verify that **rating input is rounded to the nearest 0.5 before being stored**, and that `avg_rating` is rounded to nearest 0.5 for responses:
 
 - 3.2 → 3.0
 - 3.6 → 3.5
 - 3.9 → 4.0
+
+Rating input is also rounded to the nearest 0.5 before being stored.
 
 ### Error Handling
 All service tests verify proper error propagation from repository layer:

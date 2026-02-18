@@ -63,7 +63,7 @@ func ToGiftResponse(g model.Gift) GiftResponse {
 		IsNew:        g.IsNew,
 		IsBestSeller: g.IsBestSeller,
 		AvgRating:    g.AvgRating,
-		StarRating:   g.StarRating(),
+		StarRating:   RoundToHalf(g.AvgRating),
 		TotalReviews: g.TotalReviews,
 		InStock:      g.InStock(),
 		CreatedAt:    g.CreatedAt.Format(time.RFC3339),

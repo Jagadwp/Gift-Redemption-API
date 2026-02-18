@@ -66,6 +66,10 @@ Based on the schema dump (`docs/dump_gift_redemption_schema.sql`), these optimiz
 
 These choices reduce query cost for common endpoints (`/gifts` listing, `/gifts/:id`, and user activity history) while preserving data integrity.
 
+## Deployment (Heroku)
+
+Heroku was chosen for **simplicity and speed**: it handles build, run, and PostgreSQL provisioning with minimal setup, which keeps the review process lightweight. For a backend API like this, Heroku offers a practical path to production without extra infrastructure complexity.
+
 ## Files in `docs/`
 
 - `docs/dump_gift_redemption_schema.rar`: compressed database export (contains `.sql` schema + data)
