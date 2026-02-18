@@ -353,6 +353,9 @@ https://gift-redemption-api-c059a607629a.herokuapp.com
 Swagger:
 https://gift-redemption-api-c059a607629a.herokuapp.com/swagger/index.html
 
+Preview:
+![alt text](docs/heroku-preview.png)
+
 ## Bonus Implementation
 
 ### CRUD User
